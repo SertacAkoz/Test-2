@@ -14,7 +14,7 @@ class ControlButtons extends StatelessWidget {
       children: [
         // Opens volume slider dialog
         IconButton(
-          icon: const Icon(Icons.volume_up),
+          icon: const Icon(Icons.volume_up, color: Colors.white,),
           onPressed: () {
             showSliderDialog(
               context: context,
@@ -49,19 +49,19 @@ class ControlButtons extends StatelessWidget {
               );
             } else if (playing != true) {
               return IconButton(
-                icon: const Icon(Icons.play_arrow),
+                icon: const Icon(Icons.play_arrow, color: Colors.white,),
                 iconSize: 64.0,
                 onPressed: player.play,
               );
             } else if (processingState != ProcessingState.completed) {
               return IconButton(
-                icon: const Icon(Icons.pause),
+                icon: const Icon(Icons.pause, color: Colors.white,),
                 iconSize: 64.0,
                 onPressed: player.pause,
               );
             } else {
               return IconButton(
-                icon: const Icon(Icons.replay),
+                icon: const Icon(Icons.replay, color: Colors.white,),
                 iconSize: 64.0,
                 onPressed: () => player.seek(Duration.zero),
               );
@@ -73,7 +73,7 @@ class ControlButtons extends StatelessWidget {
           stream: player.speedStream,
           builder: (context, snapshot) => IconButton(
             icon: Text("${snapshot.data?.toStringAsFixed(1)}x",
-                style: const TextStyle(fontWeight: FontWeight.bold)),
+                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
             onPressed: () {
               showSliderDialog(
                 context: context,

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 class SeekBar extends StatefulWidget {
   final Duration duration;
@@ -39,59 +40,40 @@ class SeekBarState extends State<SeekBar> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        SliderTheme(
-          data: _sliderThemeData.copyWith(
-            thumbShape: HiddenThumbComponentShape(),
-            activeTrackColor: Colors.blue.shade100,
-            inactiveTrackColor: Colors.grey.shade300,
-          ),
-          child: ExcludeSemantics(
-            child: Slider(
-              min: 0.0,
-              max: widget.duration.inMilliseconds.toDouble(),
-              value: min(widget.bufferedPosition.inMilliseconds.toDouble(),
-                  widget.duration.inMilliseconds.toDouble()),
-              onChanged: (value) {
-                setState(() {
-                  _dragValue = value;
-                });
-                if (widget.onChanged != null) {
-                  widget.onChanged!(Duration(milliseconds: value.round()));
-                }
-              },
-              onChangeEnd: (value) {
-                if (widget.onChangeEnd != null) {
-                  widget.onChangeEnd!(Duration(milliseconds: value.round()));
-                }
-                _dragValue = null;
-              },
-            ),
-          ),
-        ),
+        // SliderTheme(
+        //   data: _sliderThemeData.copyWith(
+        //     thumbShape: HiddenThumbComponentShape(),
+        //     activeTrackColor: Colors.blue.shade100,
+        //     inactiveTrackColor: Colors.grey.shade300,
+        //   ),
+        //   child: ExcludeSemantics(
+        //     child: Slider(
+        //       min: 0.0,
+        //       max: widget.duration.inMilliseconds.toDouble(),
+        //       value: min(widget.bufferedPosition.inMilliseconds.toDouble(),
+        //           widget.duration.inMilliseconds.toDouble()),
+        //       onChanged: (value) {
+        //         setState(() {
+        //           _dragValue = value;
+        //         });
+        //         if (widget.onChanged != null) {
+        //           widget.onChanged!(Duration(milliseconds: value.round()));
+        //         }
+        //       },
+        //       onChangeEnd: (value) {
+        //         if (widget.onChangeEnd != null) {
+        //           widget.onChangeEnd!(Duration(milliseconds: value.round()));
+        //         }
+        //         _dragValue = null;
+        //       },
+        //     ),
+        //   ),
+        // ),
         SliderTheme(
           data: _sliderThemeData.copyWith(
             inactiveTrackColor: Colors.transparent,
           ),
-          child: Slider(
-            min: 0.0,
-            max: widget.duration.inMilliseconds.toDouble(),
-            value: min(_dragValue ?? widget.position.inMilliseconds.toDouble(),
-                widget.duration.inMilliseconds.toDouble()),
-            onChanged: (value) {
-              setState(() {
-                _dragValue = value;
-              });
-              if (widget.onChanged != null) {
-                widget.onChanged!(Duration(milliseconds: value.round()));
-              }
-            },
-            onChangeEnd: (value) {
-              if (widget.onChangeEnd != null) {
-                widget.onChangeEnd!(Duration(milliseconds: value.round()));
-              }
-              _dragValue = null;
-            },
-          ),
+          child: circularSlider(),
         ),
         Positioned(
           right: 16.0,
@@ -104,6 +86,66 @@ class SeekBarState extends State<SeekBar> {
               style: Theme.of(context).textTheme.bodySmall),
         ),
       ],
+    );
+  }
+
+  SleekCircularSlider circularSlider() {
+    return SleekCircularSlider(
+      appearance: const CircularSliderAppearance(
+          counterClockwise: false, spinnerMode: false),
+      innerWidget: (percentage) {
+        return const Padding(
+          padding: EdgeInsets.all(20.0),
+          child: CircleAvatar(
+            radius: 30.0,
+            backgroundImage: NetworkImage(
+                'https://media.gq.com/photos/5cdeef0e1f8a4e271cddab8d/16:9/w_1280,c_limit/Old-Town-Road-Video-GQ-2019-051719.jpg'),
+            backgroundColor: Colors.transparent,
+          ),
+        );
+        // return Container();
+      },
+      min: 0.0,
+      max: widget.duration.inMilliseconds.toDouble(),
+      initialValue: min(_dragValue ?? widget.position.inMilliseconds.toDouble(),
+          widget.duration.inMilliseconds.toDouble()),
+      onChange: (value) {
+        setState(() {
+          _dragValue = value;
+        });
+        if (widget.onChanged != null) {
+          widget.onChanged!(Duration(milliseconds: value.round()));
+        }
+      },
+      onChangeEnd: (value) {
+        if (widget.onChangeEnd != null) {
+          widget.onChangeEnd!(Duration(milliseconds: value.round()));
+        }
+        _dragValue = null;
+      },
+    );
+  }
+
+  Slider defaultSlider() {
+    return Slider(
+      min: 0.0,
+      max: widget.duration.inMilliseconds.toDouble(),
+      value: min(_dragValue ?? widget.position.inMilliseconds.toDouble(),
+          widget.duration.inMilliseconds.toDouble()),
+      onChanged: (value) {
+        setState(() {
+          _dragValue = value;
+        });
+        if (widget.onChanged != null) {
+          widget.onChanged!(Duration(milliseconds: value.round()));
+        }
+      },
+      onChangeEnd: (value) {
+        if (widget.onChangeEnd != null) {
+          widget.onChangeEnd!(Duration(milliseconds: value.round()));
+        }
+        _dragValue = null;
+      },
     );
   }
 

@@ -22,7 +22,6 @@ class AudioView extends StatefulWidget {
 }
 
 class _AudioViewState extends State<AudioView> {
-
   @override
   void initState() {
     super.initState();
@@ -35,31 +34,89 @@ class _AudioViewState extends State<AudioView> {
     super.dispose();
   }
 
+  BottomNavigationBar buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      backgroundColor: widget.style.backgroundEndColor,
+      selectedItemColor: Colors.white,
+      currentIndex: 0,
+      onTap: (value) {
+      },
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.volume_up), label: ''),
+        BottomNavigationBarItem(icon: Icon(Icons.volume_up), label: ''),
+        BottomNavigationBarItem(icon: Icon(Icons.volume_up), label: ''),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: buildBottomNavigationBar(),
+      appBar: AppBar(
+        backgroundColor: widget.style.backgroundBeginColor,
+        elevation: 0,
+        title: const Text('Popular'),
+        // leading: const Icon(Icons.keyboard_arrow_down_rounded),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 10.0),
+            child: Icon(
+              Icons.settings,
+            ),
+          ),
+        ],
+      ),
       body: Observer(
         builder: (context) {
-          return SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ControlButtons(widget.viewModel.player),
-                StreamBuilder<PositionData>(
-                  stream: widget.viewModel.positionDataStream,
-                  builder: (context, snapshot) {
-                    final positionData = snapshot.data;
-                    return SeekBar(
-                      duration: positionData?.duration ?? Duration.zero,
-                      position: positionData?.position ?? Duration.zero,
-                      bufferedPosition:
-                          positionData?.bufferedPosition ?? Duration.zero,
-                      onChangeEnd: widget.viewModel.player.seek,
-                    );
-                  },
-                ),
+          return Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                widget.style.backgroundBeginColor,
+                widget.style.backgroundEndColor,
               ],
+            )),
+            child: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(),
+                  Column(
+                    children: [
+                      Text(
+                        'Old  Town Road',
+                        style: widget.style.musicTextStyle,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Lil Nas X',
+                        style: widget.style.musicOwnerTextStyle,
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                  const SizedBox(height: 50),
+                  StreamBuilder<PositionData>(
+                    stream: widget.viewModel.positionDataStream,
+                    builder: (context, snapshot) {
+                      final positionData = snapshot.data;
+                      return SeekBar(
+                        duration: positionData?.duration ?? Duration.zero,
+                        position: positionData?.position ?? Duration.zero,
+                        bufferedPosition:
+                            positionData?.bufferedPosition ?? Duration.zero,
+                        onChangeEnd: widget.viewModel.player.seek,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  ControlButtons(widget.viewModel.player),
+                ],
+              ),
             ),
           );
         },

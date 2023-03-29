@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:test_2/audio_page/audio_stlye.dart';
-import 'package:test_2/audio_page/audio_view.dart';
-import 'package:test_2/audio_page/audio_view_model.dart';
+
 import 'package:test_2/di/dependecy_injection.dart';
-import 'package:test_2/home_page/home_view.dart';
+import 'package:test_2/route/route_generator.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,15 +16,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      onGenerateRoute: RouteGenerator.routeGenerator,
       debugShowCheckedModeBanner: false,
       title: 'Test 2',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AudioView(
-        style: getIt.get<AudioStyle>(),
-        viewModel: getIt.get<AudioViewModel>(),
-      ),
+      initialRoute: '/',
     );
   }
 }
